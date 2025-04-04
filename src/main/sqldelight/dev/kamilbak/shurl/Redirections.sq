@@ -1,0 +1,14 @@
+CREATE TABLE Redirection (
+    key TEXT UNIQUE PRIMARY KEY NOT NULL,
+    value TEXT NOT NULL
+);
+
+add:
+INSERT INTO Redirection(key, value)
+VALUES (?, ?);
+
+resolve:
+SELECT value FROM Redirection WHERE key = ?;
+
+find:
+SELECT key FROM Redirection WHERE value = ?;

@@ -1,0 +1,23 @@
+[versions]
+kotlin = "2.0.20"
+shadow = "8.3.2"
+ktor = "3.1.2"
+html = "0.12.0"
+logback = "1.4.14"
+sqldelight = "2.0.2"
+keccak = "2.0.0"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+sqldelight  = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+
+[libraries]
+ktor-server-core = { group = "io.ktor", name  = "ktor-server-core", version.ref = "ktor" }
+ktor-server-html = { group = "io.ktor", name  = "ktor-server-html-builder", version.ref = "ktor" }
+ktor-server-netty = { group = "io.ktor", name  = "ktor-server-netty", version.ref = "ktor" }
+kotlinx-html = { group = "org.jetbrains.kotlinx", name  = "kotlinx-html", version.ref = "html" }
+logback = { group = "ch.qos.logback", name  = "logback-classic", version.ref = "logback" }
+sqldelight = { group = "app.cash.sqldelight", name  = "sqlite-driver", version.ref = "sqldelight" }
+keccak = { group = "asia.hombre", name  = "keccak", version.ref = "keccak" }
