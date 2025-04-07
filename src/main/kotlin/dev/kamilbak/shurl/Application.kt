@@ -4,6 +4,7 @@ import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import java.io.File
 
 fun main() {
 	embeddedServer(
@@ -18,7 +19,12 @@ fun main() {
 fun Application.module() {
 	var driver : JdbcSqliteDriver? = null
 	try {
-		driver = JdbcSqliteDriver("jdbc:sqlite:shurl.db")
+		val dbFileName = "shurl.db"
+		val didDbExist = File(dbFileName).exists()
+		driver = JdbcSqliteDriver("jdbc:sqlite:$dbFileName")
+		if (didDbExist.not()) {
+			Database.Schema.create(driver)
+		}
 		val database = Database(driver)
 		configureFrontend()
 		configureRedirections(database)
