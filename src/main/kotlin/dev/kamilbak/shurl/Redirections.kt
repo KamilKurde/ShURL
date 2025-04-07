@@ -1,6 +1,6 @@
 package dev.kamilbak.shurl
 
-import asia.hombre.keccak.api.KMAC256
+import asia.hombre.keccak.api.SHAKE128
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
@@ -36,7 +36,7 @@ fun Application.configureRedirections(database: Database) {
 
 				log.info(
 					tag,
-					"""Successfully created redirection "$destination" <- "$key" in just $took for ${call.request.origin.remoteHost}"""
+					"""Successfully created redirection "$destination" <- "$key" in just $took for ${call.originAddress}"""
 				)
 				lastCreation = TimeSource.Monotonic.markNow()
 			} catch (e: Exception) {
@@ -47,12 +47,17 @@ fun Application.configureRedirections(database: Database) {
 		}
 		get("/{key}") {
 			val key = call.parameters["key"] ?: ""
-			val destination = database.redirectionsQueries.resolve(key).executeAsOneOrNull()
+			val (destination, took) = measureTimedValue {
+				database.redirectionsQueries.resolve(key).executeAsOneOrNull()
+			}
 
 			if (destination != null) {
 				call.respondRedirect(destination, permanent = true)
 
-				log.info(tag, """Successfully redirected "$key" -> "$destination""")
+				log.info(
+					tag,
+					"""Successfully redirected "$key" -> "$destination" in just $took for ${call.originAddress}"""
+				)
 			} else {
 				call.respondRedirect("/?error=redirect", permanent = false)
 
@@ -76,3 +81,12 @@ private fun RedirectionsQueries.createRedirection(destination: String): String {
 
 	return current
 }
+
+private val RoutingCall.originAddress: String
+	get() = with(request.origin) {
+		if (remoteHost == remoteAddress) {
+			remoteHost
+		} else {
+			"$remoteHost ($remoteAddress)"
+		}
+	}
