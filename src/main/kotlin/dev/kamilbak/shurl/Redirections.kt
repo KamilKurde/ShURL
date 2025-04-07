@@ -74,7 +74,7 @@ private fun RedirectionsQueries.createRedirection(destination: String): String {
 	var iteration = 1
 
 	do {
-		current = KMAC256(array, iteration++).digest().encodeToBase58String()
+		current = SHAKE128(iteration++).digest(array).encodeToBase58String()
 	} while (resolve(current).executeAsOneOrNull() != null)
 
 	add(current, destination)
