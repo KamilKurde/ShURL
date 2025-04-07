@@ -1,8 +1,10 @@
 package dev.kamilbak.shurl
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.html.*
 import io.ktor.server.plugins.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
 
@@ -78,6 +80,9 @@ fun Application.configureFrontend() {
 					}
 				}
 			}
+		}
+		get("/favicon.ico") {
+			call.respond(HttpStatusCode.NotFound)
 		}
 	}
 }
