@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.kamilbak.shurl"
-version = "0.0.1"
+version = "1.0.0"
 
 application {
 	mainClass = "dev.kamilbak.shurl.ApplicationKt"
@@ -25,7 +25,7 @@ dependencies {
 	implementation(libs.ktor.server.html)
 	implementation(libs.ktor.server.netty)
 	implementation(libs.kotlinx.html)
-	implementation(libs.logback)
+	implementation(libs.slf4j.simple)
 	implementation(libs.sqldelight)
 	implementation(libs.keccak)
 }
@@ -36,4 +36,8 @@ sqldelight{
 			packageName.set("dev.kamilbak.shurl")
 		}
 	}
+}
+
+tasks.shadowJar{
+	minimize()
 }
